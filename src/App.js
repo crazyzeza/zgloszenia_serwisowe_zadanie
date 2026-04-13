@@ -29,6 +29,7 @@ function App() {
   const [screenFlash, setScreenFlash] = useState(false)
   const [gooningHistory, setGooningHistory] = useState([])
   const [showHistory, setShowHistory] = useState(false)
+  const [normalMode, setNormalMode] = useState(false)
 
   const [statusToFilterBy, setStatusToFilterBy] = useState("")
   
@@ -68,7 +69,9 @@ function App() {
     "BASED GIGACHAD 💪",
     "GOONING SESSION 🤤",
     "EDGING MAXING 💯",
-    "BRAIN ROT ACTIVATED 🧠"
+    "BRAIN ROT ACTIVATED 🧠",
+    "YOU ENTERED THE HOLY GOONSPOT 🧠"
+
   ];
   
   // Gooning Session Timer
@@ -370,18 +373,37 @@ function App() {
 
   return (
     <>
+      {/* Mode Toggle Button */}
+      <button 
+        className="mode-toggle-btn"
+        onClick={() => {
+          setNormalMode(!normalMode);
+          if (!normalMode) {
+            // Wyłącz wszystkie tryby gdy wchodzisz w normal mode
+            setDiscoMode(false);
+            setSigmaMode(false);
+            setSkibidiMode(false);
+            setGooningSession(false);
+          } else {
+            showBrainrotPhrase();
+          }
+        }}
+      >
+        {normalMode ? '🎨 DOPAMINE MODE 🌟' : '📋 NORMAL MODE 📋'}
+      </button>
+
       {/* Screen Flash Effect */}
-      {screenFlash && <div className="screen-flash"></div>}
+      {!normalMode && screenFlash && <div className="screen-flash"></div>}
 
       {/* Fale w tle */}
-      <div className="ocean">
+      {!normalMode && <div className="ocean">
         <div className="wave wave1"></div>
         <div className="wave wave2"></div>
         <div className="wave wave3"></div>
-      </div>
+      </div>}
 
       {/* Brainrot GIF w rogu */}
-      <div 
+      {!normalMode && <div 
         className="brainrot-gif-container"
         onClick={(e) => {
           e.stopPropagation();
@@ -396,10 +418,10 @@ function App() {
           alt="brainrot" 
           className="brainrot-gif"
         />
-      </div>
+      </div>}
 
       {/* FLYING GIGACHAD */}
-      {gigachadFlying && (
+      {!normalMode && gigachadFlying && (
         <div className="gigachad-flying">
           <img 
             src="https://media.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" 
@@ -410,7 +432,7 @@ function App() {
       )}
 
       {/* Confetti */}
-      {confetti.map(conf => (
+      {!normalMode && confetti.map(conf => (
         <div 
           key={conf.id} 
           className="confetti"
@@ -423,7 +445,7 @@ function App() {
       ))}
 
       {/* Particles */}
-      {particles.map(particle => (
+      {!normalMode && particles.map(particle => (
         <div
           key={particle.id}
           className="particle"
@@ -436,21 +458,21 @@ function App() {
       ))}
 
       {/* Achievement Notification */}
-      {achievement && (
+      {!normalMode && achievement && (
         <div className="achievement">
           {achievement}
         </div>
       )}
 
       {/* Brainrot Phrase */}
-      {brainrotPhrase && (
+      {!normalMode && brainrotPhrase && (
         <div className="brainrot-phrase">
           {brainrotPhrase}
         </div>
       )}
 
       {/* Click Effects */}
-      {clickEffects.map(effect => (
+      {!normalMode && clickEffects.map(effect => (
         <div
           key={effect.id}
           className="click-effect"
@@ -466,7 +488,7 @@ function App() {
       ))}
 
       {/* Click Combo Counter */}
-      {clickCombo > 0 && (
+      {!normalMode && clickCombo > 0 && (
         <div className="combo-counter">
           <div className="combo-number">{clickCombo}x</div>
           <div className="combo-label">COMBO!</div>
@@ -476,7 +498,7 @@ function App() {
         </div>
       )}
 
-      <div className="stars">
+      {!normalMode && <div className="stars">
         {stars.map(star => (
           <span 
             key={star.id} 
@@ -489,19 +511,19 @@ function App() {
             }}
           >{star.emoji}</span>
         ))}
-      </div>
+      </div>}
       <div 
-        className={`app-container ${discoMode ? 'disco-mode' : ''} ${sigmaMode ? 'sigma-mode' : ''} ${skibidiMode ? 'skibidi-mode' : ''} ${gooningSession ? 'gooning-mode' : ''} ${megaComboActive ? 'mega-combo-mode' : ''}`}
-        onClick={handleInteractiveClick}
+        className={`app-container ${normalMode ? 'normal-mode' : ''} ${discoMode ? 'disco-mode' : ''} ${sigmaMode ? 'sigma-mode' : ''} ${skibidiMode ? 'skibidi-mode' : ''} ${gooningSession ? 'gooning-mode' : ''} ${megaComboActive ? 'mega-combo-mode' : ''}`}
+        onClick={normalMode ? undefined : handleInteractiveClick}
         style={{
-          cursor: (gooningSession || discoMode || skibidiMode || sigmaMode) ? 'pointer' : 'default',
-          transform: shakeIntensity > 0 ? `translate(${Math.random() * shakeIntensity - shakeIntensity/2}px, ${Math.random() * shakeIntensity - shakeIntensity/2}px)` : 'none'
+          cursor: (!normalMode && (gooningSession || discoMode || skibidiMode || sigmaMode)) ? 'pointer' : 'default',
+          transform: (!normalMode && shakeIntensity > 0) ? `translate(${Math.random() * shakeIntensity - shakeIntensity/2}px, ${Math.random() * shakeIntensity - shakeIntensity/2}px)` : 'none'
         }}
       >
-        <h1 className="app-title">✨ System Zgłoszeń ✨</h1>
+        <h1 className="app-title">{normalMode ? 'System Zgłoszeń Serwisowych' : '✨ System Zgłoszeń ✨'}</h1>
         
         {/* Rizz Counter */}
-        <div className="rizz-counter">
+        {!normalMode && <div className="rizz-counter">
           <span className="rizz-label">RIZZ POINTS:</span>
           <span className="rizz-value">{rizzPoints} 📈</span>
           {rizzPoints > 500 && <span className="rizz-emoji">🔥💯</span>}
@@ -515,10 +537,10 @@ function App() {
               {showHistory ? '📊 HIDE STATS' : `📊 SESSIONS: ${gooningHistory.length}`}
             </button>
           )}
-        </div>
+        </div>}
         
         {/* Disco Mode Toggle */}
-        <div style={{textAlign: 'center', marginBottom: '20px', display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap'}}>
+        {!normalMode && <div style={{textAlign: 'center', marginBottom: '20px', display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap'}}>
           <button 
             className="disco-btn" 
             onClick={() => setDiscoMode(!discoMode)}
@@ -560,10 +582,10 @@ function App() {
           >
             {gooningSession ? '🤤 GOONING... 💦' : '🧠 START GOONING 🧠'}
           </button>
-        </div>
+        </div>}
         
         {/* Gooning Session Timer */}
-        {gooningSession && (
+        {!normalMode && gooningSession && (
           <div className="gooning-timer">
             <div className="timer-label">GOONING SESSION ACTIVE</div>
             <div className="timer-value">
@@ -580,7 +602,7 @@ function App() {
         )}
 
         {/* Gooning Session History */}
-        {showHistory && gooningHistory.length > 0 && (
+        {!normalMode && showHistory && gooningHistory.length > 0 && (
           <div className="gooning-history">
             <div className="history-header">
               <h3>🏆 GOONING SESSION HISTORY 🏆</h3>
@@ -648,7 +670,7 @@ function App() {
           </div>
         )}
         
-        <div className="glass-card" onMouseEnter={createParticles}>
+        <div className="glass-card" onMouseEnter={normalMode ? undefined : createParticles}>
           <div className="card-title">Dodaj nowe zgłoszenie</div>
           <div className="mb-3">
             <label className="form-label">Klient</label>
@@ -683,18 +705,26 @@ function App() {
           <button className="btn-magic" onClick={AddNewSubmission}>Dodaj zgłoszenie</button>
         </div>
 
-        <div className="glass-card" onMouseEnter={createParticles}>
+        <div className="glass-card" onMouseEnter={normalMode ? undefined : createParticles}>
           <div className="card-title">Filtruj zgłoszenia</div>
           <div className="filter-section">
-            <button className="filter-btn new" value={"Nowe"} onClick={filterList} onMouseEnter={createParticles}>🌱 Nowe</button>
-            <button className="filter-btn in-progress" value={"W trakcie"} onClick={filterList} onMouseEnter={createParticles}>⚡ W trakcie</button>
-            <button className="filter-btn done" value={"Zakończone"} onClick={filterList} onMouseEnter={createParticles}>✅ Zakończone</button>
-            <button className="filter-btn all" value={""} onClick={filterList} onMouseEnter={createParticles}>🌈 Wszystkie</button>
+            <button className="filter-btn new" value={"Nowe"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+              {!normalMode && '🌱 '}Nowe
+            </button>
+            <button className="filter-btn in-progress" value={"W trakcie"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+              {!normalMode && '⚡ '}W trakcie
+            </button>
+            <button className="filter-btn done" value={"Zakończone"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+              {!normalMode && '✅ '}Zakończone
+            </button>
+            <button className="filter-btn all" value={""} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+              {!normalMode && '🌈 '}Wszystkie
+            </button>
           </div>
         </div>
 
         {/* Random brainrot GIF przy liście zgłoszeń */}
-        {submissions.length > 0 && (
+        {!normalMode && submissions.length > 0 && (
           <div 
             className="floating-gif floating-gif-1"
             onClick={(e) => {
@@ -714,7 +744,7 @@ function App() {
         </div>
 
         {/* Brainrot GIF przy podsumowaniu */}
-        {submissions.length > 5 && (
+        {!normalMode && submissions.length > 5 && (
           <div 
             className="floating-gif floating-gif-2"
             onClick={(e) => {
@@ -729,7 +759,7 @@ function App() {
         )}
 
         {/* Extra brainrot GIFs when RIZZ is high */}
-        {rizzPoints > 500 && (
+        {!normalMode && rizzPoints > 500 && (
           <div 
             className="floating-gif floating-gif-3"
             onClick={(e) => {
@@ -743,7 +773,7 @@ function App() {
           </div>
         )}
 
-        {rizzPoints > 1000 && (
+        {!normalMode && rizzPoints > 1000 && (
           <>
             <div 
               className="floating-gif floating-gif-4"

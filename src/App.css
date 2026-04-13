@@ -1833,6 +1833,327 @@ body {
   }
 }
 
+/* MODE TOGGLE BUTTON */
+.mode-toggle-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10007;
+  background: transparent;
+  border: none;
+  color: transparent;
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  text-shadow: none;
+  transition: all 0.3s ease;
+  box-shadow: none;
+  opacity: 0;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.mode-toggle-btn:hover {
+  opacity: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ffd700 100%);
+  border: 3px solid #fff;
+  color: white;
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  transform: scale(1.05) rotate(-3deg);
+  box-shadow: 0 5px 25px rgba(255, 215, 0, 0.7);
+  animation: modeToggleRainbow 1s linear infinite;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+}
+
+.mode-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes modeTogglePulse {
+  0%, 100% {
+    box-shadow: 0 5px 30px rgba(102, 126, 234, 0.6);
+  }
+  50% {
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes modeToggleRainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* NORMAL MODE STYLING */
+
+/* Override body background when normal mode is active */
+body:has(.normal-mode) {
+  background: #e0e0e0 !important;
+  animation: none !important;
+}
+
+.normal-mode,
+.normal-mode * {
+  animation: none !important;
+}
+
+.normal-mode ::before,
+.normal-mode ::after {
+  animation: none !important;
+}
+
+.normal-mode {
+  background: transparent !important;
+  transition: all 0.5s ease !important;
+}
+
+.normal-mode .glass-card {
+  background: #f5f5f5 !important;
+  border: 1px solid #bbb !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  animation: none !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: none !important;
+}
+
+.normal-mode .glass-card:hover {
+  transform: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+}
+
+.normal-mode .app-title {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #666 !important;
+  background-clip: unset !important;
+  text-shadow: none !important;
+  animation: none !important;
+  color: #666 !important;
+  font-size: 2rem !important;
+  filter: none !important;
+  font-weight: 400 !important;
+}
+
+.normal-mode .card-title {
+  color: #888 !important;
+  text-shadow: none !important;
+  animation: none !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #888 !important;
+  filter: none !important;
+  font-size: 1.1rem !important;
+  font-weight: 500 !important;
+}
+
+.normal-mode .card-title::before {
+  display: none !important;
+}
+
+.normal-mode .summary-item::before,
+.normal-mode .submission-item::after,
+.normal-mode .empty-message::before {
+  display: none !important;
+}
+
+.normal-mode .btn-magic,
+.normal-mode .disco-btn,
+.normal-mode .sigma-btn,
+.normal-mode .skibidi-btn,
+.normal-mode .gooning-btn,
+.normal-mode button {
+  background: #999 !important;
+  border: 1px solid #777 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  color: #fff !important;
+  filter: none !important;
+  font-weight: 400 !important;
+}
+
+.normal-mode .btn-magic:hover,
+.normal-mode .disco-btn:hover,
+.normal-mode .sigma-btn:hover,
+.normal-mode .skibidi-btn:hover,
+.normal-mode .gooning-btn:hover,
+.normal-mode button:hover {
+  background: #888 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.normal-mode .btn-magic::before,
+.normal-mode .disco-btn::before,
+.normal-mode .sigma-btn::before,
+.normal-mode .skibidi-btn::before,
+.normal-mode .gooning-btn::before {
+  display: none !important;
+}
+
+.normal-mode .btn-magic:active,
+.normal-mode button:active {
+  transform: translateY(0) !important;
+}
+
+.normal-mode .summary-grid {
+  color: #666 !important;
+}
+
+.normal-mode .summary-item {
+  background: #ccc !important;
+  border: 1px solid #aaa !important;
+  box-shadow: none !important;
+  animation: none !important;
+  text-shadow: none !important;
+}
+
+.normal-mode .summary-item:hover {
+  background: #ccc !important;
+  transform: none !important;
+}
+
+.normal-mode .form-label {
+  color: #666 !important;
+  text-shadow: none !important;
+  font-weight: 400 !important;
+}
+
+.normal-mode .mb-3 label {
+  color: #666 !important;
+  text-shadow: none !important;
+}
+
+.normal-mode .form-control,
+.normal-mode .form-select {
+  background: #fff !important;
+  border: 1px solid #ccc !important;
+  color: #555 !important;
+}
+
+.normal-mode table {
+  background: #f5f5f5 !important;
+}
+
+.normal-mode th {
+  background: #e0e0e0 !important;
+  color: #666 !important;
+  text-shadow: none !important;
+  font-weight: 500 !important;
+}
+
+.normal-mode td {
+  color: #555 !important;
+  background: transparent !important;
+}
+
+.normal-mode tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+.normal-mode tr {
+  animation: none !important;
+}
+
+.normal-mode .summary-item span:first-child {
+  color: #777 !important;
+  font-weight: 400 !important;
+  text-shadow: none !important;
+}
+
+.normal-mode .summary-item span:last-child {
+  color: #555 !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+}
+
+.normal-mode * {
+  filter: none !important;
+}
+
+.normal-mode *::before,
+.normal-mode *::after {
+  animation: none !important;
+}
+
+.normal-mode .summary-grid,
+.normal-mode .summary-grid * {
+  color: #333 !important;
+  text-shadow: none !important;
+  animation: none !important;
+}
+
+.normal-mode .filter-btn {
+  background: #aaa !important;
+  color: #fff !important;
+  border: 1px solid #999 !important;
+  box-shadow: none !important;
+  animation: none !important;
+  font-weight: 400 !important;
+}
+
+.normal-mode .filter-btn:hover {
+  background: #999 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.normal-mode .filter-btn.new,
+.normal-mode .filter-btn.in-progress,
+.normal-mode .filter-btn.done,
+.normal-mode .filter-btn.all {
+  background: #aaa !important;
+  color: #fff !important;
+  animation: none !important;
+}
+
+.normal-mode .submission-item {
+  background: #e5e5e5 !important;
+  border-left: 3px solid #999 !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+.normal-mode .submission-item::after {
+  display: none !important;
+}
+
+.normal-mode .submission-item:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.normal-mode .submission-item p {
+  color: #666 !important;
+}
+
+.normal-mode .submission-item strong {
+  color: #555 !important;
+  animation: none !important;
+  font-weight: 500 !important;
+}
+
+.normal-mode .empty-message {
+  color: #888 !important;
+  animation: none !important;
+  font-weight: 400 !important;
+}
+
+.normal-mode .empty-message::before {
+  content: '' !important;
+}
+
+@media (max-width: 768px) {
+  .mode-toggle-btn {
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+
 /* GOONING HISTORY */
 .history-toggle-btn {
   margin-left: 20px;
