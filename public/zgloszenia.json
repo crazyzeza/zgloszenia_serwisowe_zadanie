@@ -1,0 +1,5 @@
+[
+    {"id": 1, "klient": "Jan Kowalski", "urzadzenie": "Laptop Lenovo", "usterka": "Brak obrazu po uruchomieniu", "status": "nowe", "priorytet": "wysoki"},
+    {"id": 2, "klient": "Anna Nowak", "urzadzenie": "Telefon Samsung", "usterka": "Pęknięty ekran", "status": "w trakcie", "priorytet": "średni"},
+    {"id": 3, "klient": "Piotr Zieliński", "urzadzenie": "Tablet Huawei", "usterka": "Nie ładuje baterii", "status": "zakończone", "priorytet": "niski"}
+  ]
