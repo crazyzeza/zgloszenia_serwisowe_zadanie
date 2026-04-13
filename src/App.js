@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import SubmissionsList from './SubmissionsList'
 import './App.css'
 
 function App() {
@@ -12,21 +12,7 @@ function App() {
   const [submissions, setSubmissions] = useState([])
 
   const [statusToFilterBy, setStatusToFilterBy] = useState("")
-  function SubmissionsList(props) {
-    let list = submissions;
-    if (statusToFilterBy !== "") {
-      list = submissions.filter((submission) => submission.status === statusToFilterBy);
-    }
-
-    if (list.length == 0) {
-      return "Brak zgłoszeń do wyświetlenia";
-    }
-    return list.map((submission) => (
-      <div key={submission.id}>
-        <p>Klient: {submission.klient}, Urządzenie: {submission.urzadzenie}, Usterka: {submission.usterka}, Status: {submission.status}, Priorytet: {submission.priorytet}</p>
-      </div>
-    ));
-  }
+  
   function AddNewSubmission(){
     setSubmissions([
       ...submissions, {
@@ -98,7 +84,7 @@ function App() {
       <div className="card mb-4">
         <div className="card-header">Lista zgłoszeń</div>
         <div className="card-body">
-          <SubmissionsList></SubmissionsList>
+          <SubmissionsList submissions={submissions} statusToFilterBy={statusToFilterBy}></SubmissionsList>
         </div>
       </div>
 
