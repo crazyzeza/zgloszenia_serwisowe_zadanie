@@ -8,6 +8,7 @@ function App() {
   const [formIssue, setFormIssue] = useState("")
   const [formStatus, setFormStatus] = useState("")
   const [formPriority, setFormPriority] = useState("")
+  const [formError, setFormError] = useState("")
 
   const [submissions, setSubmissions] = useState([])
   const [confetti, setConfetti] = useState([])
@@ -29,7 +30,7 @@ function App() {
   const [screenFlash, setScreenFlash] = useState(false)
   const [gooningHistory, setGooningHistory] = useState([])
   const [showHistory, setShowHistory] = useState(false)
-  const [normalMode, setNormalMode] = useState(false)
+  const [normalMode, setNormalMode] = useState(true)
 
   const [statusToFilterBy, setStatusToFilterBy] = useState("")
   
@@ -266,20 +267,57 @@ function App() {
     }
 
     if (list.length == 0) {
-      return <div className="empty-message">Brak zgłoszeń do wyświetlenia</div>;
+      return <p className={normalMode ? "text-muted" : "empty-message"}>Brak zgłoszeń do wyświetlenia</p>;
     }
+    
+    if (normalMode) {
+      return (
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Klient</th>
+              <th>Urządzenie</th>
+              <th>Usterka</th>
+              <th>Status</th>
+              <th>Priorytet</th>
+            </tr>
+          </thead>
+          <tbody>
+            {list.map((submission) => (
+              <tr key={submission.id}>
+                <td>{submission.id}</td>
+                <td>{submission.klient}</td>
+                <td>{submission.urzadzenie}</td>
+                <td>{submission.usterka}</td>
+                <td>{submission.status}</td>
+                <td>{submission.priorytet}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    }
+    
     return list.map((submission) => (
       <div key={submission.id} className="submission-item">
-        <p><strong>Klient:</strong> {submission.klient} | <strong>Urządzenie:</strong> {submission.urzadzenie} | <strong>Usterka:</strong> {submission.usterka} | <strong>Status:</strong> {submission.status} | <strong>Priorytet:</strong> {submission.priorytet}</p>
+        <p className="mb-0"><strong>Klient:</strong> {submission.klient} | <strong>Urządzenie:</strong> {submission.urzadzenie} | <strong>Usterka:</strong> {submission.usterka} | <strong>Status:</strong> {submission.status} | <strong>Priorytet:</strong> {submission.priorytet}</p>
       </div>
     ));
   }
   function AddNewSubmission(){
-    if (!formClient || !formDevice || !formIssue || !formStatus || !formPriority) return;
+    if (!formClient || !formDevice || !formIssue || !formStatus || !formPriority) {
+      setFormError("Wypełnij wszystkie pola formularza!");
+      return;
+    }
     
+    setFormError("");
+    const maxId = submissions.length > 0 
+      ? Math.max(...submissions.map(s => s.id)) 
+      : 0;
     const newSubmissions = [
       ...submissions, {
-        id:submissions.length,
+        id: maxId + 1,
         klient:formClient,
         urzadzenie:formDevice,
         usterka:formIssue,
@@ -365,7 +403,8 @@ function App() {
   }
   function SubmissionCounter(props) {
     const count = submissions.filter((submission) => submission.status === props.status).length;
-    return <div className="summary-item"><p>{props.status}: {count}</p></div>
+    const displayName = props.status.charAt(0).toUpperCase() + props.status.slice(1);
+    return <p className={normalMode ? "mb-1" : "summary-item"}>{displayName}: {count}</p>
   }
   
   // Generowanie losowych gwiazdek (zmniejszona liczba dla wydajności)
@@ -379,11 +418,25 @@ function App() {
     emoji: starEmojis[Math.floor(Math.random() * starEmojis.length)]
   }));
 
+  // Dodaj klasę do body w zależności od trybu
+  useEffect(() => {
+    if (normalMode) {
+      document.body.classList.add('normal-mode-body');
+      document.body.classList.remove('dopamine-mode-body');
+    } else {
+      document.body.classList.remove('normal-mode-body');
+      document.body.classList.add('dopamine-mode-body');
+    }
+  }, [normalMode]);
+
   return (
     <>
       {/* Mode Toggle Button */}
       <button 
-        className="mode-toggle-btn"
+        className={normalMode ? "btn btn-primary position-fixed dopamine-toggle-btn" : "mode-toggle-btn"}
+        style={normalMode ? {bottom: '10px', right: '10px', zIndex: 1000, opacity: 0, transition: 'opacity 0.3s'} : {}}
+        onMouseEnter={(e) => { if (normalMode) e.target.style.opacity = '1'; }}
+        onMouseLeave={(e) => { if (normalMode) e.target.style.opacity = '0'; }}
         onClick={() => {
           setNormalMode(!normalMode);
           if (!normalMode) {
@@ -521,14 +574,14 @@ function App() {
         ))}
       </div>}
       <div 
-        className={`app-container ${normalMode ? 'normal-mode' : ''} ${discoMode ? 'disco-mode' : ''} ${sigmaMode ? 'sigma-mode' : ''} ${skibidiMode ? 'skibidi-mode' : ''} ${gooningSession ? 'gooning-mode' : ''} ${megaComboActive ? 'mega-combo-mode' : ''}`}
+        className={`${normalMode ? 'container mt-4' : 'app-container'} ${normalMode ? '' : ''} ${discoMode ? 'disco-mode' : ''} ${sigmaMode ? 'sigma-mode' : ''} ${skibidiMode ? 'skibidi-mode' : ''} ${gooningSession ? 'gooning-mode' : ''} ${megaComboActive ? 'mega-combo-mode' : ''}`}
         onClick={normalMode ? undefined : handleInteractiveClick}
         style={{
           cursor: (!normalMode && (gooningSession || discoMode || skibidiMode || sigmaMode)) ? 'pointer' : 'default',
           transform: (!normalMode && shakeIntensity > 0) ? `translate(${Math.random() * shakeIntensity - shakeIntensity/2}px, ${Math.random() * shakeIntensity - shakeIntensity/2}px)` : 'none'
         }}
       >
-        <h1 className="app-title">{normalMode ? 'System Zgłoszeń Serwisowych' : '✨ System Zgłoszeń ✨'}</h1>
+        <h1 className={normalMode ? "mb-4" : "app-title"}>{normalMode ? 'System Zgłoszeń Serwisowych' : '✨ System Zgłoszeń ✨'}</h1>
         
         {/* Rizz Counter */}
         {!normalMode && <div className="rizz-counter">
@@ -678,8 +731,9 @@ function App() {
           </div>
         )}
         
-        <div className="glass-card" onMouseEnter={normalMode ? undefined : createParticles}>
-          <div className="card-title">Dodaj nowe zgłoszenie</div>
+        <div className={normalMode ? "card mb-4" : "glass-card"} onMouseEnter={normalMode ? undefined : createParticles}>
+          <div className={normalMode ? "card-header" : "card-title"}>Dodaj nowe zgłoszenie</div>
+          <div className={normalMode ? "card-body" : ""}>
           <div className="mb-3">
             <label className="form-label">Klient</label>
             <input type="text" className="form-control" value={formClient} onChange={(e) => setFormClient(e.target.value)} placeholder="Wpisz nazwę klienta..." />
@@ -696,36 +750,38 @@ function App() {
             <label className="form-label">Status</label>
             <select className="form-select" value={formStatus} onChange={(e) => setFormStatus(e.target.value)}>
               <option value="">Wybierz status</option>
-              <option value="Nowe">Nowe</option>
-              <option value="W trakcie">W trakcie</option>
-              <option value="Zakończone">Zakończone</option>
+              <option value="nowe">Nowe</option>
+              <option value="w trakcie">W trakcie</option>
+              <option value="zakończone">Zakończone</option>
             </select>
           </div>
           <div className="mb-3">
             <label className="form-label">Priorytet</label>
             <select className="form-select" value={formPriority} onChange={(e) => setFormPriority(e.target.value)}>
               <option value="">Wybierz priorytet</option>
-              <option value="Niski">Niski</option>
-              <option value="Średni">Średni</option>
-              <option value="Wysoki">Wysoki</option>
+              <option value="niski">Niski</option>
+              <option value="średni">Średni</option>
+              <option value="wysoki">Wysoki</option>
             </select>
           </div>
-          <button className="btn-magic" onClick={AddNewSubmission}>Dodaj zgłoszenie</button>
+          {formError && <div className="alert alert-danger">{formError}</div>}
+          <button className={normalMode ? "btn btn-primary" : "btn-magic"} onClick={AddNewSubmission}>Dodaj zgłoszenie</button>
+          </div>
         </div>
 
-        <div className="glass-card" onMouseEnter={normalMode ? undefined : createParticles}>
-          <div className="card-title">Filtruj zgłoszenia</div>
-          <div className="filter-section">
-            <button className="filter-btn new" value={"Nowe"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+        <div className={normalMode ? "mb-4" : "glass-card"} onMouseEnter={normalMode ? undefined : createParticles}>
+          {normalMode ? <h5>Filtruj:</h5> : <div className="card-title">Filtruj zgłoszenia</div>}
+          <div className={normalMode ? "" : "filter-section"}>
+            <button className={normalMode ? "btn btn-outline-primary me-2" : "filter-btn new"} value={"nowe"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
               {!normalMode && '🌱 '}Nowe
             </button>
-            <button className="filter-btn in-progress" value={"W trakcie"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+            <button className={normalMode ? "btn btn-outline-warning me-2" : "filter-btn in-progress"} value={"w trakcie"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
               {!normalMode && '⚡ '}W trakcie
             </button>
-            <button className="filter-btn done" value={"Zakończone"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+            <button className={normalMode ? "btn btn-outline-success me-2" : "filter-btn done"} value={"zakończone"} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
               {!normalMode && '✅ '}Zakończone
             </button>
-            <button className="filter-btn all" value={""} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
+            <button className={normalMode ? "btn btn-outline-secondary" : "filter-btn all"} value={""} onClick={filterList} onMouseEnter={normalMode ? undefined : createParticles}>
               {!normalMode && '🌈 '}Wszystkie
             </button>
           </div>
@@ -746,9 +802,11 @@ function App() {
           </div>
         )}
 
-        <div className="glass-card">
-          <div className="card-title">Lista zgłoszeń</div>
+        <div className={normalMode ? "card mb-4" : "glass-card"}>
+          <div className={normalMode ? "card-header" : "card-title"}>Lista zgłoszeń</div>
+          <div className={normalMode ? "card-body" : ""}>
           <SubmissionsList></SubmissionsList>
+          </div>
         </div>
 
         {/* Brainrot GIF przy podsumowaniu */}
@@ -816,12 +874,12 @@ function App() {
           </>
         )}
 
-        <div className="glass-card">
-          <div className="card-title">Podsumowanie</div>
-          <div className="summary-grid">
-            <SubmissionCounter status="Nowe"></SubmissionCounter>
-            <SubmissionCounter status="W trakcie"></SubmissionCounter>
-            <SubmissionCounter status="Zakończone"></SubmissionCounter>
+        <div className={normalMode ? "card" : "glass-card"}>
+          <div className={normalMode ? "card-header" : "card-title"}>Podsumowanie</div>
+          <div className={normalMode ? "card-body" : "summary-grid"}>
+            <SubmissionCounter status="nowe"></SubmissionCounter>
+            <SubmissionCounter status="w trakcie"></SubmissionCounter>
+            <SubmissionCounter status="zakończone"></SubmissionCounter>
           </div>
         </div>
       </div>

@@ -13,6 +13,12 @@ body {
   animation: pulseBackground 8s ease-in-out infinite;
 }
 
+/* Normal mode - czyste tło Bootstrap */
+body.normal-mode-body {
+  background: #f8f9fa !important;
+  animation: none !important;
+}
+
 @keyframes pulseBackground {
   0% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
   25% { background: linear-gradient(135deg, #f093fb 0%, #667eea 50%, #38ef7d 100%); }
