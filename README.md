@@ -56,3 +56,9 @@ Uwagi:
 Dane zgłoszeń są przechowywane tylko w pamięci aplikacji (po odświeżeniu strony znikają)
 Aplikacja ma charakter demonstracyjny i nie wykorzystuje bazy danych
 Projekt został utworzony przy użyciu Create React App
+
+DOKUMENTACJA:
+Komponent SubmissionList:
+Przyjmuje listę zgłoszeń i status, po którym chcemy filtrować, w props. Następuje filtrowanie, a następnie przefiltrowana lista jest mapowana i wyświetlana.
+Test submissionList.test:
+Tworzy nowe wystąpienie komponentu SubmissionsList z przykładowymi danymi. Testy sprawdzają listę (wynik mapowania) po filtrowaniu według danego statusu.
