@@ -10,7 +10,7 @@ function SubmissionsList(props) {
       return "Brak zgłoszeń do wyświetlenia";
     }
     return filteredSubmissions.map((submission) => (
-      <div key={submission.id}>
+      <div key={submission.id} className="card">
         <p>Klient: {submission.klient}, Urządzenie: {submission.urzadzenie}, Usterka: {submission.usterka}, Status: {submission.status}, Priorytet: {submission.priorytet}</p>
       </div>
     ));
