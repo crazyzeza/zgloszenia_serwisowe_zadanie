@@ -27,6 +27,6 @@ test("Filtrowanie - zgłoszenia w trakcie", () => {
     expect(screen.getByText(/Ruta/i)).toBeInTheDocument();//assert
 })
 test("Filtrowanie - zakończone zgłoszenia", () => {
-    render(<SubmissionsList submissions={mockData} statusToFilterBy="W trakcie"/>)//act
+    render(<SubmissionsList submissions={mockData} statusToFilterBy="Zakończone"/>)//act
     expect(screen.getByText(/Brak zgłoszeń do wyświetlenia/i)).toBeInTheDocument();//assert
 })
